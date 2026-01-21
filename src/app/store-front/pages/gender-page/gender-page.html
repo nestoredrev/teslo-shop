@@ -1,0 +1,25 @@
+<h1 class="text-3xl font-bold font-family-montserrat">
+    All Products for <span class="text-secondary">{{ genderType() | titlecase }}</span>
+</h1>
+
+
+
+@if (productsResource.isLoading()) {
+    <loader />
+}
+
+@if (productsResource.hasValue()) {
+
+    <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+        @for (product of productsResource.value().products; track product.id) {
+            <product-card [product]="product"/>
+        }@empty {
+            <p>Not found products</p>
+        }
+    </section>
+    <pagination [pages]="productsResource.value().pages" 
+                [currentPage]="paginationService.currentPage()" 
+    />
+}
+
+

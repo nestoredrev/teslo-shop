@@ -1,0 +1,33 @@
+<h1 class="text-2xl font-bold text-center font-family-montserrat text-secondary mb-2">
+    Authentication
+</h1>
+<form [formGroup]="loginForm" (ngSubmit)="loginSubmit()" autocomplete="off">
+    <fieldset class="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4">
+        <legend class="fieldset-legend">Login</legend>
+
+        <label class="label">Email</label>
+        <input type="email" class="input" formControlName="email" placeholder="Email" />
+
+        <label class="label">Password</label>
+        <input type="password" class="input" formControlName="password" placeholder="Password" />
+
+        <button type="submit" class="btn btn-neutral mt-4 mb-4" [disabled]="loginForm.invalid">
+            Login
+        </button>
+
+        @if (hasError()) {
+            <div role="alert" class="alert alert-error animate-fadeIn">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span>Error! Task failed successfully.</span>
+            </div>
+        }
+
+        <a routerLink="/auth/register" class="text-secondary text-bold text-sm link link-hover">
+            Create your acount
+        </a>
+    </fieldset>
+</form>

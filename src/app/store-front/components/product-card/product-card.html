@@ -1,0 +1,37 @@
+<div class="card bg-base-100 shadow-sm animate-fadeIn">
+    <figure>
+        <div class="swiper" #swiperFlipDiv>
+            <!-- Additional required wrapper -->
+            <div class="swiper-wrapper">
+                <!-- Slides -->
+                @for (image of product().images; track $index) {
+                <div class="swiper-slide">
+                    <img [src]=" image | productImage" 
+                        [alt]="image" 
+                        class="w-full object-cover" />
+                </div>
+                }
+            </div>
+            <!-- Add Pagination -->
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-pagination"></div>
+        </div>
+    </figure>
+    <div class="card-body">
+        <h2 class="card-title font-family-montserrat text-secondary text-xl cursor-pointer hover:underline"
+            (click)="productDetail( product().slug )">
+            {{ product().title }}
+            <!-- <div class="badge badge-secondary">NEW</div> -->
+        </h2>
+        <p>{{ product().description | slice: 0:70 }} ...</p>
+        <div class="card-actions justify-end">
+            @for (tag of product().tags; track $index) {
+            <div class="badge badge-outline">{{ tag }}</div>
+            }
+        </div>
+    </div>
+    <div class="card-actions justify-end mb-5 mr-5">
+        <a [routerLink]="['/product', product().slug]" class="btn btn-primary">More</a>
+    </div>
+</div>

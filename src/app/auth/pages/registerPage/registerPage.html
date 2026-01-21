@@ -1,0 +1,81 @@
+<h1 class="text-2xl font-bold text-center font-family-montserrat text-secondary mb-2">
+    Registration
+</h1>
+<form [formGroup]="registerForm" (ngSubmit)="registerSubmit()" autocomplete="off">
+    <fieldset class="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4">
+        <legend class="fieldset-legend">Register</legend>
+
+        <label class="label">Email</label>
+        <input  
+            type="email" 
+            class="input" 
+            formControlName="email" 
+            placeholder="Email" 
+            [class.input-error]="formUtils.isValidField(registerForm, 'email')"
+        />
+        @if ( formUtils.isValidField(registerForm, 'email') ) {
+            <p class="label text-error">{{ formUtils.getFieldError(registerForm, 'email') }}</p>
+        }
+
+        <label class="label">Password</label>
+        <input  
+            type="password" 
+            class="input" 
+            formControlName="password" 
+            placeholder="Password"
+            [class.input-error]="formUtils.isValidField(registerForm, 'password')" 
+        />
+        @if ( formUtils.isValidField(registerForm, 'password') ) {
+            <p class="label text-error">{{ formUtils.getFieldError(registerForm, 'password') }}</p>
+        }
+
+        <label class="label">Confirm password</label>
+        <input  
+            type="password" 
+            class="input" 
+            formControlName="password2" 
+            placeholder="Confirm password"
+            [class.input-error]="formUtils.isValidField(registerForm, 'password2')" 
+        />
+        @if ( formUtils.isValidField(registerForm, 'password2') ) {
+            <p class="label text-error">{{ formUtils.getFieldError(registerForm, 'password2') }}</p>
+        }
+        @if( registerForm.errors?.['passwordsNotEqual'] && registerForm.touched ) {
+            <p class="label text-error">Passwords do not match</p>
+        }   
+
+        <label class="label">Full name</label>
+        <input 
+            type="text" 
+            class="input" 
+            formControlName="fullName" 
+            placeholder="Full name"
+            [class.input-error]="formUtils.isValidField(registerForm, 'fullName')" 
+        />
+        @if ( formUtils.isValidField(registerForm, 'fullName') ) {
+            <p class="label text-error">The field accepts only name and surname</p>
+        }
+
+        <button type="submit" class="btn btn-neutral mt-4 mb-4" [disabled]="registerForm.invalid">
+            Register!
+        </button>
+
+        @if (hasSuccess()) {
+            <div role="alert" class="alert alert-success">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span>Registered successfully!</span>
+                <a routerLink="/auth/login" class="btn btn-sm">Login</a>
+            </div>
+        }
+        @if (hasError()) {
+            <div role="alert" class="alert alert-error">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span>{{ errorMessage() }}</span>
+            </div>
+        }
+    </fieldset>
+</form>
