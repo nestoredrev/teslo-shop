@@ -1,0 +1,11 @@
+@if (productResource.isLoading()) {
+    <loader/>
+}
+
+<!-- @if (productResource.error()) {
+    <h1 class="flex justify-center items-center text-error text-2xl">{{ productResource.error()?.message }}</h1>
+} -->
+
+@if(productResource.hasValue()){
+    <product-details [product]="productResource.value()"/>
+}

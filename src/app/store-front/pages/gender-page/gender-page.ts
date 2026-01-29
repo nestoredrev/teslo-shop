@@ -6,7 +6,7 @@ import { map, startWith } from 'rxjs';
 
 import { ProductsService } from '@/products/services/products.service';
 
-import { ProductCard } from "@/store-front/components/product-card/product-card";
+import { ProductCard } from "@/products/components/product-card/product-card";
 import { Loader } from "@/store-front/components/loader/loader";
 
 import { PaginationComponent } from "@/shared/components/pagination/pagination";

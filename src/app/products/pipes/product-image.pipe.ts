@@ -11,7 +11,7 @@ export class ProductImagePipe implements PipeTransform {
   transform(imageName: string | string[]): string {
 
     
-    if (!imageName) {
+    if (!imageName || (Array.isArray(imageName) && imageName.length === 0)) {
       return './assets/images/no-image.jpg';
     }
 

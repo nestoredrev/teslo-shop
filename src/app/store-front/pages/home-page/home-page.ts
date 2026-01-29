@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
 
-import { ProductCard } from '@/store-front/components/product-card/product-card';
+import { ProductCard } from '@/products/components/product-card/product-card';
 import { Loader } from "@/store-front/components/loader/loader";
 
 import { ProductsService } from '@/products/services/products.service';
