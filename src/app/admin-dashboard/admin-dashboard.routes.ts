@@ -3,6 +3,7 @@ import { AdminDashboardLayout } from "./layouts/admin-dashboard-layout/admin-das
 import { ProductsAdminPage } from "./pages/products-admin-page/products-admin-page";
 import { ProductAdminPage } from "./pages/product-admin-page/product-admin-page";
 import { isAdminGuard } from "@/auth/guards/is-admin-guard";
+import { DashboardAdminPage } from "./pages/dashboard-admin-page/dashboard-admin-page";
 
 export const adminDasboardRoutes:Routes = [
     {
@@ -13,6 +14,10 @@ export const adminDasboardRoutes:Routes = [
             isAdminGuard,
         ],
         children: [
+            {
+                path: 'dashboard',
+                component: DashboardAdminPage
+            },
             {
                 path: 'products',
                 component: ProductsAdminPage

@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { Observable, of, tap, catchError, throwError, OperatorFunction } from 'rxjs';
+import { Observable, of, tap, catchError, throwError, OperatorFunction, forkJoin, map, switchMap } from 'rxjs';
 import { Gender, Product, ProductsResponse } from '../interfaces/products-response.interface';
 import { User } from '@/auth/interfaces/user.interface';
 
@@ -95,20 +95,40 @@ export class ProductsService {
     );
   }
 
-  createProduct(productLike: Partial<Product>): Observable<Product> {
+  createProduct(productLike: Partial<Product>, imageFileList?: FileList): Observable<Product> {
     return this.http.post<Product>(`${baseUrl}/products`, productLike)
     .pipe(
+      switchMap(createdProduct => this.uploadImages(imageFileList)
+      .pipe(
+        map(imageNames => ({
+          ...createdProduct,
+          images: [...(createdProduct.images ?? []), ...imageNames]
+        }))
+      )),
       tap (product => this.updateProductCache(product) ),
       this.handleError()
     )
   }
 
-  updateProduct(id: string, productLike: Partial<Product>): Observable<Product> {
-    return this.http.patch<Product>(`${baseUrl}/products/${id}`, productLike)
+  updateProduct(id: string, productLike: Partial<Product>, imageFileList?: FileList): Observable<Product> {
+    
+    const currentImages = productLike.images ?? [];
+    return this.uploadImages(imageFileList)
     .pipe(
+      map(imageNames => ({
+        ...productLike,
+        images: [...currentImages, ...imageNames]
+      })),
+      switchMap(updatedProduct => this.http.patch<Product>(`${baseUrl}/products/${id}`, updatedProduct)),
       tap (product => this.updateProductCache(product) ),
       this.handleError()
-    )
+    );
+    
+    // return this.http.patch<Product>(`${baseUrl}/products/${id}`, productLike)
+    // .pipe(
+    //   tap (product => this.updateProductCache(product) ),
+    //   this.handleError()
+    // )
   }
 
   updateProductCache(product: Product) {
@@ -124,6 +144,37 @@ export class ProductsService {
       )
     })
   }
+
+
+  private uploadImages( images?: FileList ): Observable<string[]> {
+    
+    if(!images){
+      return of([]);
+    }
+
+    const uploadObservables: Observable<string>[] = Array.from(images)
+    .map( image => {
+      return this.uploadImage(image);
+    })
+
+    // Wait for all uploads to complete and gather the URLs into an array
+    return forkJoin(uploadObservables); 
+  }
+
+  private uploadImage(imageFile: File): Observable<string> {
+    const formData = new FormData();
+    formData.append('file', imageFile);
+
+    return this.http.post<{ fileName: string }>(`${baseUrl}/files/product`, formData)
+    .pipe(
+      map(resp => resp.fileName),
+      catchError(error => {
+        console.error('Error uploading image:', error);
+        throw error;
+      })
+    );
+  }
+
 
   private handleError<T>(): OperatorFunction<T, T> {
     return catchError<T, Observable<never>>( () => throwError( new Error('Something is wrong, try again or later') ) );

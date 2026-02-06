@@ -20,7 +20,9 @@ export class ProductDetailsComponent implements OnInit {
   private fb = inject(FormBuilder);
   private destroyRef = inject(DestroyRef);
   private productsService = inject(ProductsService);
-  public wasUpdated = signal<boolean>(false);
+  public readonly wasUpdated = signal<boolean>(false);
+  public readonly tempImages = signal<string[]>([]);
+  public imageFileList = signal<FileList | undefined>(undefined);
   formUtils = FormUtils;
 
   public productForm = this.fb.group({
@@ -68,10 +70,10 @@ export class ProductDetailsComponent implements OnInit {
       ...(formValue as any),
       tags: formValue.tags?.split(',').map(tag => tag.trim().toLowerCase() ?? []),
     };
-
+    
     if(this.product().id === 'new'){
 
-      this.productsService.createProduct(productLike)
+      this.productsService.createProduct(productLike, this.imageFileList() ?? undefined)
       .pipe(
         takeUntilDestroyed(this.destroyRef)
       )
@@ -86,7 +88,7 @@ export class ProductDetailsComponent implements OnInit {
       });
 
     }else{
-      this.productsService.updateProduct(this.product().id, productLike)
+      this.productsService.updateProduct(this.product().id, productLike, this.imageFileList() ?? undefined)
       .pipe(
         takeUntilDestroyed(this.destroyRef)
       )
@@ -103,4 +105,37 @@ export class ProductDetailsComponent implements OnInit {
       });
     }
   }
+
+  onFilesSelected(event: Event) {
+    const fileList = (event.target as HTMLInputElement).files;
+    if (!fileList || fileList.length === 0) {
+      return;
+    }
+
+    const files = Array.from(fileList);
+    this.imageFileList.set(fileList);
+    const imageUrls = files.map(file => URL.createObjectURL(file));
+    this.tempImages.set(imageUrls);
+  }
+
+  removeTempImage(index: number) {
+    const currentImages = this.tempImages();
+    const currentFiles = this.imageFileList();
+    
+    // Revoke the URL for the removed image
+    URL.revokeObjectURL(currentImages[index]);
+    
+    // Remove image preview
+    this.tempImages.set(currentImages.filter((_, i) => i !== index));
+    
+    // Remove corresponding file from FileList by recreating it via DataTransfer
+    if (currentFiles) {
+      const filesArray = Array.from(currentFiles).filter((_, i) => i !== index);
+      const dt = new DataTransfer();
+      filesArray.forEach(file => dt.items.add(file));
+      this.imageFileList.set(dt.files);
+    } else {
+      this.imageFileList.set(undefined);
+    }
+  }   
 }
