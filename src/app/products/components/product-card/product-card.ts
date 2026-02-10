@@ -22,9 +22,12 @@ export class ProductCard implements AfterViewInit {
 
   ngAfterViewInit(): void {
     const swiper = new Swiper(this.swiperFlipDiv().nativeElement, {
-      modules: [EffectFlip,Navigation, Pagination, Scrollbar],
+      modules: [EffectFlip, Navigation, Pagination, Scrollbar],
       effect: 'flip',
       loop: true,
+      centeredSlides: false,
+      slidesPerView: 'auto',
+      watchSlidesProgress: true,
       pagination: {
         el: ".swiper-pagination",
       },

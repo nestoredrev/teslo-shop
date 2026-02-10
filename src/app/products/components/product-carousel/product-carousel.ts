@@ -50,6 +50,9 @@ export class ProductCarouselComponent implements AfterViewInit, OnChanges {
       modules: [Navigation, Pagination, Scrollbar],
       speed: 500,
       loop: true,
+      centeredSlides: false,
+      slidesPerView: 'auto',
+      watchSlidesProgress: true,
       direction: 'horizontal',
       navigation: {
         nextEl: '.swiper-button-next',
