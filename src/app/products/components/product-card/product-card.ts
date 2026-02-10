@@ -4,9 +4,9 @@ import { Router, RouterLink } from "@angular/router";
 import { Product } from '@/products/interfaces/products-response.interface';
 import { ProductImagePipe } from '@/products/pipes/product-image.pipe';
 import Swiper from 'swiper';
-import { EffectFlip, Navigation, Pagination, Scrollbar } from 'swiper/modules';
 import 'swiper/css';
-import 'swiper/css/pagination';
+// import 'swiper/css/pagination';
+import { EffectFlip, Navigation, Pagination, Scrollbar } from 'swiper/modules';
 
 @Component({
   selector: 'product-card',
@@ -25,9 +25,6 @@ export class ProductCard implements AfterViewInit {
       modules: [EffectFlip, Navigation, Pagination, Scrollbar],
       effect: 'flip',
       loop: true,
-      centeredSlides: false,
-      slidesPerView: 'auto',
-      watchSlidesProgress: true,
       pagination: {
         el: ".swiper-pagination",
       },

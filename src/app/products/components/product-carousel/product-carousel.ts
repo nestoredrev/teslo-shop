@@ -1,11 +1,11 @@
 import { AfterViewInit, Component, ElementRef, input, OnChanges, SimpleChanges, viewChild } from '@angular/core';
 import { ProductImagePipe } from '@/products/pipes/product-image.pipe';
 import Swiper from 'swiper';
-import { Navigation, Pagination, Scrollbar } from 'swiper/modules';
 import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
-import 'swiper/css/scrollbar';
+// import 'swiper/css/navigation';
+// import 'swiper/css/pagination';
+// import 'swiper/css/scrollbar';
+import { Navigation, Pagination, Scrollbar } from 'swiper/modules';
 
 @Component({
   selector: 'product-carousel',
@@ -50,9 +50,6 @@ export class ProductCarouselComponent implements AfterViewInit, OnChanges {
       modules: [Navigation, Pagination, Scrollbar],
       speed: 500,
       loop: true,
-      centeredSlides: false,
-      slidesPerView: 'auto',
-      watchSlidesProgress: true,
       direction: 'horizontal',
       navigation: {
         nextEl: '.swiper-button-next',
