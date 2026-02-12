@@ -1,11 +1,11 @@
 import { AfterViewInit, Component, ElementRef, input, OnChanges, SimpleChanges, viewChild } from '@angular/core';
 import { ProductImagePipe } from '@/products/pipes/product-image.pipe';
 import Swiper from 'swiper';
-import 'swiper/css';
-// import 'swiper/css/navigation';
-// import 'swiper/css/pagination';
-// import 'swiper/css/scrollbar';
 import { Navigation, Pagination, Scrollbar } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import 'swiper/css/scrollbar';
 
 @Component({
   selector: 'product-carousel',
