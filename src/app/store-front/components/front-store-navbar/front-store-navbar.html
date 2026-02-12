@@ -32,23 +32,68 @@
     </div>
     <div class="navbar-end gap-4">
 
-        @if (authService.isAdmin()) {
-            <a routerLink="/admin/products" class="btn btn-primary">Admin dashboard</a>
-        }
+        <!-- Dropdown de acciones en pantallas pequeñas -->
+        <div class="dropdown dropdown-end lg:hidden">
+            <div tabindex="0" role="button" class="btn btn-ghost">
+                Menu
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M19 9l-7 7-7-7" />
+                </svg>
+            </div>
+            <ul tabindex="-1" class="menu menu-sm dropdown-content bg-base-100 rounded-box z-10 mt-3 w-52 p-2 shadow">
+                @if (authService.isAdmin()) {
+                    <li>
+                        <a routerLink="/admin/products" class="justify-between">
+                            Admin dashboard
+                        </a>
+                    </li>
+                }
 
-        @if (authService.authStatus() === 'authenticated') {
-            <button class="btn btn-ghost">
-                {{ authService.user()?.fullName}}
-            </button>
-            <button class="btn btn-error" (click)="authService.logout()">
-                Logout
-            </button>
-        }@else if(authService.authStatus() === 'not-authenticated') {
-            <button routerLink="/auth/login" class="btn btn-secondary">
-                Login
-            </button>    
-        }@else {
-            <button class="btn btn-ghost">...</button>
-        }
+                @if (authService.authStatus() === 'authenticated') {
+                    <li>
+                        <span class="font-semibold">
+                            {{ authService.user()?.fullName }}
+                        </span>
+                    </li>
+                    <li>
+                        <button (click)="authService.logout()" class="text-error">
+                            Logout
+                        </button>
+                    </li>
+                } @else if (authService.authStatus() === 'not-authenticated') {
+                    <li>
+                        <a routerLink="/auth/login" class="text-secondary">
+                            Login
+                        </a>
+                    </li>
+                } @else {
+                    <li><span>...</span></li>
+                }
+            </ul>
+        </div>
+
+        <!-- Botones separados en pantallas grandes -->
+        <div class="hidden lg:flex items-center gap-4">
+            @if (authService.isAdmin()) {
+                <a routerLink="/admin/products" class="btn btn-primary">Admin dashboard</a>
+            }
+
+            @if (authService.authStatus() === 'authenticated') {
+                <button class="btn btn-ghost">
+                    {{ authService.user()?.fullName}}
+                </button>
+                <button class="btn btn-error" (click)="authService.logout()">
+                    Logout
+                </button>
+            } @else if (authService.authStatus() === 'not-authenticated') {
+                <button routerLink="/auth/login" class="btn btn-secondary">
+                    Login
+                </button>    
+            } @else {
+                <button class="btn btn-ghost">...</button>
+            }
+        </div>
     </div>
 </div>
