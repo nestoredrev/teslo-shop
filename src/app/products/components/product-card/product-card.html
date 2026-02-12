@@ -1,20 +1,10 @@
 <div class="card bg-base-100 shadow-sm animate-fadeIn">
     <figure>
-        <div class="swiper" #swiperFlipDiv>
-            <!-- Additional required wrapper -->
-            <div class="swiper-wrapper">
-                <!-- Slides -->
-                @for (image of product().images; track $index) {
-                <div class="swiper-slide">
-                    <img [src]=" image | productImage" 
-                        [alt]="image" 
-                        class="w-full object-cover" />
-                </div>
-                }
-            </div>
-            <!-- Add Pagination -->
-            <div class="swiper-pagination"></div>
-        </div>
+        <img 
+        [src]="product().images | productImage" 
+        [alt]="product().images" 
+        class="w-full object-cover animate-fadeIn cursor-pointer hover:scale-105 transition-transform duration-300" 
+        [routerLink]="['/product', product().slug]"/>
     </figure>
     <div class="card-body">
         <h2 class="card-title font-family-montserrat text-secondary text-xl cursor-pointer hover:underline"
