@@ -21,6 +21,8 @@ export class ProductDetailsComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
   private productsService = inject(ProductsService);
   public readonly wasUpdated = signal<boolean>(false);
+  public readonly wasCreated = signal<boolean>(false);
+  public readonly isSaving = signal<boolean>(false);
   public readonly tempImages = signal<string[]>([]);
   public imageFileList = signal<FileList | undefined>(undefined);
   formUtils = FormUtils;
@@ -64,7 +66,7 @@ export class ProductDetailsComponent implements OnInit {
       this.productForm.markAllAsTouched();
       return;
     }
-    
+    this.isSaving.set(true);
     const formValue = this.productForm.value;
     const productLike: Partial<Product> = {
       ...(formValue as any),
@@ -72,7 +74,7 @@ export class ProductDetailsComponent implements OnInit {
     };
     
     if(this.product().id === 'new'){
-
+      this.wasCreated.set(true);
       this.productsService.createProduct(productLike, this.imageFileList() ?? undefined)
       .pipe(
         takeUntilDestroyed(this.destroyRef)
@@ -81,8 +83,13 @@ export class ProductDetailsComponent implements OnInit {
         next: (createdProduct) => {
           this.router.navigate(['/admin/products', createdProduct.id]);
           console.log('Product created successfully:', createdProduct);
+          this.isSaving.set(false);
+          this.wasCreated.set(false);
+          setTimeout(() => this.wasCreated.set(false), 3000);
         },
         error: (error) => {
+          this.isSaving.set(false);
+          this.wasCreated.set(false);
           console.error('Error creating product:', error);
         }
       });
@@ -96,9 +103,11 @@ export class ProductDetailsComponent implements OnInit {
         next: (updatedProduct) => {
           console.log('Product updated successfully:', updatedProduct);
           this.wasUpdated.set(true);
+          this.isSaving.set(false);
           setTimeout(() => this.wasUpdated.set(false), 3000);
         },
         error: (error) => {
+          this.isSaving.set(false);
           this.wasUpdated.set(false);
           console.error('Error updating product:', error);
         }

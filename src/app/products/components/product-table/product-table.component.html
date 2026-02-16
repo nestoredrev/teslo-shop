@@ -8,15 +8,42 @@
             <input type="checkbox" class="checkbox" />
           </label>
         </th>
-        <th>Title</th>
-        <th>Price</th>
-        <th>Stock</th>
+        <th (click)="toggleSort('title')" class="cursor-pointer select-none">
+          <div class="flex items-center gap-1">
+            Title
+            <span class="text-xs opacity-70">
+              @if (sortField() === 'title') {
+                @if (sortDirection() === 'asc') { ▲ } @else { ▼ }
+              }
+            </span>
+          </div>
+        </th>
+        <th (click)="toggleSort('price')" class="cursor-pointer select-none">
+          <div class="flex items-center gap-1">
+            Price
+            <span class="text-xs opacity-70">
+              @if (sortField() === 'price') {
+                @if (sortDirection() === 'asc') { ▲ } @else { ▼ }
+              }
+            </span>
+          </div>
+        </th>
+        <th (click)="toggleSort('stock')" class="cursor-pointer select-none">
+          <div class="flex items-center gap-1">
+            Stock
+            <span class="text-xs opacity-70">
+              @if (sortField() === 'stock') {
+                @if (sortDirection() === 'asc') { ▲ } @else { ▼ }
+              }
+            </span>
+          </div>
+        </th>
         <th></th>
       </tr>
     </thead>
     <tbody>
-      <!-- row 1 -->
-       @for (product of products(); track product.id) {
+      <!-- rows -->
+       @for (product of sortedProducts(); track product.id) {
            <tr>
              <th>
                <label>
@@ -50,13 +77,20 @@
                   <span class="badge badge-success badge-sm">{{ product.stock }}</span>
                 }
              </td>
-             <th>
+             <th class="space-x-2">
                <a 
                 [routerLink]="['/admin/products', product.id]" 
                 class="btn btn-ghost btn-xs"
                >
-                    Details
-                </a>
+                  Details
+               </a>
+               <button
+                type="button"
+                class="btn btn-error btn-xs text-white"
+                (click)="onDelete(product)"
+               >
+                  Delete
+               </button>
              </th>
            </tr>
        }

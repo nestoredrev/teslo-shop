@@ -121,11 +121,17 @@
     </div>
   </div>
 
-  <!-- Imágenes -->
   <div class="flex flex-col gap-2">
-    <div class="flex justify-end h-12">
-      <button class="btn btn-secondary" type="submit">
-        <!-- <span class="loading loading-spinner loading-sm"></span> -->
+    <!-- Botón Save para pantallas medianas/grandes (parte superior derecha) -->
+    <div class="hidden sm:flex justify-end h-12">
+      <button
+        class="btn btn-secondary"
+        type="submit"
+        [disabled]="isSaving()"
+      >
+        @if (isSaving()) {
+          <span class="loading loading-spinner loading-sm mr-2"></span>
+        }
         Save
       </button>
     </div>
@@ -162,11 +168,31 @@
       } 
     </div>
 
+    <!-- Botón Save para pantallas pequeñas (al final y a todo lo ancho) -->
+    <div class="mb-5 sm:hidden mt-4">
+      <button
+        class="btn btn-secondary w-full"
+        type="submit"
+        [disabled]="isSaving()"
+      >
+        @if (isSaving()) {
+          <span class="loading loading-spinner loading-sm mr-2"></span>
+        }
+        Save
+      </button>
+    </div>
+
   </div>
 </form>
 
-@if (wasUpdated()) {
-  <div class="alert alert-success fixed bottom-4 right-4 w-80 animate-fadeIn">
-    <span>Data updated successfully</span>
-  </div>
-}
+  @if (wasUpdated()) {
+    <div class="alert alert-success fixed bottom-4 right-4 w-80 animate-fadeIn">
+      <span>Data updated successfully</span>
+    </div>
+  }
+
+  @if (wasCreated()) {
+    <div class="alert alert-success fixed bottom-4 right-4 w-80 animate-fadeIn">
+      <span>Product created successfully</span>
+    </div>
+  }

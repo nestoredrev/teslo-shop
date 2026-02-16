@@ -131,6 +131,32 @@ export class ProductsService {
     // )
   }
 
+
+  deleteProductById(id: string){
+    return this.http.delete(`${baseUrl}/products/${id}`)
+      .pipe(
+        tap(() => {
+          console.log('Product deleted successfully');
+
+          // Eliminar del caché de producto individual
+          this.productCache.delete(id);
+
+          // Actualizar/eliminar del caché de listas
+          this.productsCache.forEach((productResponse, key) => {
+            const originalLength = productResponse.products.length;
+            productResponse.products = productResponse.products.filter(p => p.id !== id);
+
+            if (productResponse.products.length !== originalLength) {
+              // Ajustar el contador de productos si existía en esta página
+              productResponse.count = Math.max(0, productResponse.count - 1);
+            }
+          });
+        }),
+        this.handleError()
+      );
+  }
+
+
   updateProductCache(product: Product) {
     const productId = product.id;
 

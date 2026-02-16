@@ -23,15 +23,16 @@
 </div>
 
 @if (productsResource.hasValue()) {
-    <div class="flex gap-2 items-center h-20">
-        <pagination [pages]="productsResource.value().pages" 
-                    [currentPage]="paginationService.currentPage()" 
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 py-2">
+        <pagination
+            [pages]="productsResource.value().pages"
+            [currentPage]="paginationService.currentPage()"
         />
         <select 
             #txtPerPage
-            class="select select-bordered w-32"
+            class="select select-bordered w-full sm:w-32"
             (change)="setPerPage(+txtPerPage.value)"
-            >
+        >
             <option value="5">5</option>
             <option value="10" selected>10</option>
             <option value="20">20</option>
@@ -39,7 +40,10 @@
             <option value="100">100</option>
         </select>
     </div>
-    
-    <product-table [products]="productsResource.value().products" />
+
+    <product-table
+        [products]="productsResource.value().products"
+        (deleted)="productsResource.reload()"
+    />
 }
 
